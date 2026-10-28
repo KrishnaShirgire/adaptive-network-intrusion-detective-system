@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# IDE
+.vscode/
+
+# Dataset files
+data/raw/*
+data/processed/*
+
+# Generated files
+results/graphs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Trained models (too large for regular GitHub)
+models/*.joblib

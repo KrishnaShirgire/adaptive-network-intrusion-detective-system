@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NIDS | Intrusion Detection Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f6fb;
+            color: #172033;
+        }
+
+        header {
+            background: #14213d;
+            color: white;
+            padding: 24px 6%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 27px;
+        }
+
+        header p {
+            margin: 0;
+            color: #d5deee;
+            line-height: 1.5;
+        }
+
+        main {
+            width: 92%;
+            max-width: 1250px;
+            margin: 28px auto;
+        }
+
+        .section {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 14px rgba(20, 33, 61, 0.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .subtext {
+            color: #657087;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .metric-card {
+            background: #f7f9fd;
+            border: 1px solid #e3e9f3;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .metric-card .label {
+            color: #657087;
+            font-size: 13px;
+        }
+
+        .metric-card .value {
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .model-card {
+            border: 1px solid #e3e9f3;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .model-card h3 {
+            margin-top: 0;
+        }
+
+        .model-card p {
+            color: #657087;
+            font-size: 14px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e5eaf2;
+        }
+
+        th {
+            background: #f1f5fb;
+            color: #273754;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 18px 0 8px;
+        }
+
+        select, input[type="file"] {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+        }
+
+        button, .download-link {
+            display: inline-block;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin-top: 18px;
+            background: #2457d6;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover, .download-link:hover {
+            background: #1946b5;
+        }
+
+        .notice {
+            padding: 14px;
+            border-radius: 8px;
+            line-height: 1.5;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #a52323;
+            border: 1px solid #ffcaca;
+        }
+
+        .success {
+            background: #edf9f0;
+            color: #176533;
+            border: 1px solid #c7ebd0;
+        }
+
+        .warning {
+            background: #fff8e8;
+            color: #775315;
+            border: 1px solid #f2dfaa;
+        }
+
+        .result-counts {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+        }
+
+        .count-box {
+            padding: 16px;
+            border-radius: 9px;
+            background: #f7f9fd;
+            border: 1px solid #e3e9f3;
+        }
+
+        .count-box strong {
+            display: block;
+            font-size: 23px;
+            margin-top: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #657087;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .model-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            header h1 {
+                font-size: 22px;
+            }
+
+            main {
+                width: 94%;
+                margin-top: 16px;
+            }
+
+            .section {
+                padding: 16px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .metric-card .value {
+                font-size: 20px;
+            }
+
+            .result-counts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Adaptive Network Intrusion Detection System</h1>
+    <p>Machine-learning-based network traffic classification</p>
+</header>
+
+<main>
+
+    <!-- Model performance overview -->
+    <section class="section">
+        <h2>Model Performance Overview</h2>
+        <p class="subtext">
+            Compare the baseline Random Forest with the
+            Genetic Algorithm (GA)-optimized Random Forest.
+            These metrics come from the saved test-set evaluation.
+        </p>
+
+        <div class="model-grid">
+            {% for row in comparison %}
+            <div class="model-card">
+                <h3>{{ row["Model"] }}</h3>
+                <p>
+                    Features used:
+                    <strong>{{ row["Selected_features"] }}</strong>
+                    out of {{ row["Original_features"] }}
+                </p>
+
+                <div class="cards">
+                    <div class="metric-card">
+                        <div class="label">Accuracy</div>
+                        <div class="value">
+                            {{ "%.2f"|format(row["Accuracy"] * 100) }}%
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="label">Precision</div>
+                        <div class="value">
+                            {{ "%.2f"|format(row["Precision"] * 100) }}%
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="label">Recall</div>
+                        <div class="value">
+                            {{ "%.2f"|format(row["Recall"] * 100) }}%
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="label">F1-score</div>
+                        <div class="value">
+                            {{ "%.2f"|format(row["F1_score"] * 100) }}%
+                        </div>
+                    </div>
+                </div>
+
+                <p>
+                    False-positive rate:
+                    <strong>
+                        {{ "%.2f"|format(row["False_positive_rate"] * 100) }}%
+                    </strong>
+                </p>
+
+                <p>
+                    Batch prediction time:
+                    <strong>
+                        {{ "%.3f"|format(row["Prediction_time_seconds"]) }} s
+                    </strong>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <!-- CSV upload and prediction -->
+    <section class="section">
+        <h2>Analyze Network Traffic CSV</h2>
+
+        <p class="subtext">
+            Upload a CSV containing network traffic features.
+            The selected model will classify each record as
+            Normal or Potential Attack.
+        </p>
+
+        <form
+            action="{{ url_for('predict') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+            <label for="model">Choose a detection model</label>
+
+            <select id="model" name="model" required>
+                <option
+                    value="baseline"
+                    {% if selected_model == "baseline" %}selected{% endif %}
+                >
+                    Baseline Random Forest — 42 features
+                </option>
+
+                <option
+                    value="optimized"
+                    {% if selected_model == "optimized" %}selected{% endif %}
+                >
+                    GA-Optimized Random Forest — 11 features
+                </option>
+            </select>
+
+            <label for="file">Choose a CSV file</label>
+            <input
+                id="file"
+                type="file"
+                name="file"
+                accept=".csv"
+                required
+            >
+
+            <p class="subtext">
+                Maximum upload size: 16 MB.
+                The CSV must contain the raw feature columns required
+                by the selected model. The baseline requires 42 input
+                features; the optimized model requires its 11 selected
+                features. If present, label, attack_cat and id are
+                excluded from model inputs.
+            </p>
+
+            <button type="submit">Analyze Traffic</button>
+        </form>
+
+        {% if error %}
+        <div class="notice error">
+            <strong>Unable to analyze the file:</strong>
+            {{ error }}
+        </div>
+        {% endif %}
+    </section>
+
+
+    <!-- Prediction results -->
+    {% if result %}
+    <section class="section">
+        <h2>Prediction Results</h2>
+
+        <div class="notice success">
+            Analysis completed using
+            <strong>{{ result["model_name"] }}</strong>.
+        </div>
+
+        <div class="notice warning">
+            A Potential Attack is a model prediction, not confirmation
+            of malicious activity. Review alerts before taking action.
+        </div>
+
+        <div class="result-counts">
+            <div class="count-box">
+                Total records
+                <strong>{{ result["total_records"] }}</strong>
+            </div>
+
+            <div class="count-box">
+                Normal predictions
+                <strong>{{ result["normal_count"] }}</strong>
+            </div>
+
+            <div class="count-box">
+                Potential attacks
+                <strong>{{ result["attack_count"] }}</strong>
+            </div>
+        </div>
+
+        <p class="subtext">
+            Showing {{ result["showing"] }} of
+            {{ result["total_records"] }} records below.
+            The download contains all processed records.
+        </p>
+
+        <a class="download-link"
+           href="{{ result['download_url'] }}">
+            Download Prediction CSV
+        </a>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        {% for column in result["preview_columns"] %}
+                        <th>{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in result["preview_rows"] %}
+                    <tr>
+                        {% for column in result["preview_columns"] %}
+                        <td>{{ row[column] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+
+</main>
+
+<footer>
+    NIDS Project | Offline CSV-based prediction dashboard
+</footer>
+
+</body>
+</html>
