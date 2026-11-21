@@ -1,9 +1,11 @@
+
 # Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 .env
+.env.*
 
 # IDE
 .vscode/
@@ -20,5 +22,9 @@ results/graphs/
 .DS_Store
 Thumbs.db
 
-# Trained models (too large for regular GitHub)
+# Trained models (stored on Hugging Face)
 models/*.joblib
+
+# Temporary files
+*.tmp
+*.bak
