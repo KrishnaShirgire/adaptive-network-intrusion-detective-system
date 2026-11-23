@@ -338,14 +338,15 @@
     </section>
 
 
+    
     <!-- CSV upload and prediction -->
     <section class="section">
         <h2>Analyze Network Traffic CSV</h2>
 
         <p class="subtext">
             Upload a CSV containing network traffic features.
-            The selected model will classify each record as
-            Normal or Potential Attack.
+            The GA-optimized Random Forest model will classify
+            each record as Normal or Potential Attack.
         </p>
 
         <form
@@ -353,25 +354,8 @@
             method="POST"
             enctype="multipart/form-data"
         >
-            <label for="model">Choose a detection model</label>
-
-            <select id="model" name="model" required>
-                <option
-                    value="baseline"
-                    {% if selected_model == "baseline" %}selected{% endif %}
-                >
-                    Baseline Random Forest — 42 features
-                </option>
-
-                <option
-                    value="optimized"
-                    {% if selected_model == "optimized" %}selected{% endif %}
-                >
-                    GA-Optimized Random Forest — 11 features
-                </option>
-            </select>
-
             <label for="file">Choose a CSV file</label>
+
             <input
                 id="file"
                 type="file"
@@ -382,11 +366,9 @@
 
             <p class="subtext">
                 Maximum upload size: 16 MB.
-                The CSV must contain the raw feature columns required
-                by the selected model. The baseline requires 42 input
-                features; the optimized model requires its 11 selected
-                features. If present, label, attack_cat and id are
-                excluded from model inputs.
+                The CSV must contain the 11 features selected
+                by the Genetic Algorithm. If present, label,
+                attack_cat and id are excluded from model inputs.
             </p>
 
             <button type="submit">Analyze Traffic</button>
@@ -399,6 +381,7 @@
         </div>
         {% endif %}
     </section>
+
 
 
     <!-- Prediction results -->
